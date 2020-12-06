@@ -955,11 +955,6 @@ public abstract class AnySoftKeyboard extends AnySoftKeyboardColorizeNavBar {
         } else {
             if (!forMultiTap) {
                 sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL);
-
-
-                Log.d(
-                        TAG,
-                        "handleDeleteLastCharacter from Nguyen: " + currentComposedWord.deleteCodePointAtCurrentPosition());
             } else {
                 // this code tries to delete the text in a different way,
                 // because of multi-tap stuff

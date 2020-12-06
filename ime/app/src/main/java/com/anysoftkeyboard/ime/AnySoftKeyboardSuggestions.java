@@ -598,7 +598,33 @@ public abstract class AnySoftKeyboardSuggestions extends AnySoftKeyboardKeyboard
         mLastCharacterWasShifted = (getInputView() != null) && getInputView().isShifted();
 
         final InputConnection ic = getCurrentInputConnection();
+
         mWord.add(primaryCode, nearByKeyCodes);
+
+        // Vietnamese Telex transformation
+        WordComposer originalMWord = new WordComposer();
+        mWord.cloneInto(originalMWord);
+
+        String vietnameseWord = "";
+
+        if (mVietnameseTelexBehavior) {
+            if (mWord.getTypedWord().length() >= 2) {
+
+                Logger.d(TAG, "handleCharacter: ok, let's see telex works here");
+
+                char curChar = mWord.getTypedWord().charAt(mWord.getTypedWord().length() - 2);
+
+                // get typed word without current character
+                String curWord = mWord.getTypedWord().subSequence(0, mWord.getTypedWord().length() - 1).toString();
+
+                vietnameseWord = vietKey.keyTyped((char) primaryCode, curChar, curWord);
+
+                if (!vietnameseWord.equals("")) {
+                    mWord.simulateTypedWord(vietnameseWord);
+                }
+            }
+        }
+
         if (isPredictionOn()) {
             if (ic != null) {
                 final int cursorPosition;
@@ -637,52 +663,29 @@ public abstract class AnySoftKeyboardSuggestions extends AnySoftKeyboardKeyboard
                 mCandidateView.replaceTypedWord(mWord.getTypedWord());
             }
         } else {
+            Logger.d(TAG, "handleCharacter: ok, let's see telex prediction off works here");
+
             if (ic != null) {
                 ic.beginBatchEdit();
             }
+
             for (char c : Character.toChars(primaryCode)) {
                 sendKeyChar(c);
             }
+
+            if (mVietnameseTelexBehavior) {
+                if (!originalMWord.getTypedWord().toString().equals(mWord.getTypedWord().toString())) {
+                    ic.deleteSurroundingText(originalMWord.getTypedWord().length(), 0);
+                    ic.commitText(mWord.getTypedWord(), 0);
+                }
+            }
+
             markExpectingSelectionUpdate();
             if (ic != null) {
                 ic.endBatchEdit();
             }
         }
         mJustAutoAddedWord = false;
-
-        if (mVietnameseTelexBehavior) {
-            if (mWord.getTypedWord().length() >= 2) {
-
-                char curChar = mWord.getTypedWord().charAt(mWord.getTypedWord().length() - 2);
-
-                // we remove the character has just input
-                String curWord = mWord.getTypedWord().subSequence(0, mWord.getTypedWord().length() - 1).toString();
-
-                String result = vietKey.keyTyped((char) primaryCode, curChar, curWord);
-
-                if (!result.equals("")) {
-
-
-                    ic.beginBatchEdit();
-
-                    //ic.commitText(result, 1);
-
-                    abortCorrectionAndResetPredictionState(true);
-
-                    // We remove wrong character
-                    String commitText = ic.getTextBeforeCursor(128, 1).toString();
-                    String[] splitText = StringUtils.split(commitText, " ");
-                    String closestRightWord = splitText[splitText.length-1];
-                    ic.deleteSurroundingText(closestRightWord.length(), 0);
-                    ic.commitText(result, 1);
-
-                    ic.endBatchEdit();
-
-
-                   mWord.simulateTypedWord(result);
-                }
-            }
-        }
     }
 
     private void markExpectingSelectionUpdate() {
@@ -727,26 +730,6 @@ public abstract class AnySoftKeyboardSuggestions extends AnySoftKeyboardKeyboard
         final boolean separatorInsideWord = (typedWord.cursorPosition() < typedWord.charCount());
         if (wasPredicting && !separatorInsideWord) {
                 commitWordToInput(wordToOutput, typedWord.getTypedWord());
-
-            if (mVietnameseTelexBehavior) {
-
-                // We remove wrong character
-                String commitText = ic.getTextBeforeCursor(128, 1).toString();
-                String[] splitText = StringUtils.split(commitText, " ");
-                String closestRightWord = splitText[splitText.length-1];
-
-                String output = (String) wordToOutput + wordToOutput;
-
-                if (closestRightWord.equals(output)) {
-                    abortCorrectionAndResetPredictionState(true);
-                    ic.beginBatchEdit();
-
-                    ic.deleteSurroundingText(closestRightWord.length(), 0);
-                    ic.commitText(wordToOutput, 1);
-
-                    ic.endBatchEdit();
-                }
-            }
 
             if (TextUtils.equals(typedWord.getTypedWord(), wordToOutput)) {
                 // if the word typed was auto-replaced, we should not learn it.
