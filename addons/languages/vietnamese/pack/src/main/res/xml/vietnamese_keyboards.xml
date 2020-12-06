@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Keyboards>
+    <Keyboard nameResId="Vietnamese" iconResId="@drawable/ic_status_vietnamese"
+              layoutResId="@xml/vietnamese_qwerty" id="363c12d9-92da-4880-b803-817737050908"
+              defaultDictionaryLocale="vi" description="Vietnamese Keyboard"
+              index="1" defaultEnabled="true"
+              physicalKeyboardMappingResId="@xml/vietnamese_physical" />
+    <Keyboard nameResId="VI Compact (16 Keys)"
+              iconResId="@drawable/ic_status_vietnamese" layoutResId="@xml/vietnamese_16keys"
+              landscapeResId="@xml/vietnamese_qwerty" id="eb0b6324-54d8-4ab6-ac2e-b96c3e0e7a37"
+              defaultDictionaryLocale="vi" description="Vietnamese Compact Keyboard (16 Keys)"
+              index="2" defaultEnabled="false"
+              physicalKeyboardMappingResId="@xml/vietnamese_physical" />
+    <Keyboard nameResId="VI Symbols" iconResId="@drawable/ic_status_vietnamese"
+              layoutResId="@xml/vietnamese_qwerty_with_symbols" landscapeResId="@xml/vietnamese_qwerty_with_symbols"
+              id="fae27109-a467-4507-9f17-e9cb873bcf69"
+              defaultDictionaryLocale="vi" description="Vietnamese Keyboard Symbols"
+              index="3" defaultEnabled="false"
+              physicalKeyboardMappingResId="@xml/vietnamese_physical" />
+    <Keyboard nameResId="VI Compact" iconResId="@drawable/ic_status_vietnamese"
+              layoutResId="@xml/vietnamese_qwerty_compact" landscapeResId="@xml/vietnamese_qwerty"
+              id="16871f84-8ae3-4ed1-b3a6-8ba7ad4d893a"
+              defaultDictionaryLocale="vi" description="Vietnamese Compact Keyboard"
+              index="4" />
+    <Keyboard nameResId="VI Drovak" iconResId="@drawable/ic_status_vietnamese"
+              layoutResId="@xml/vietnamese_dvorak" id="9e4ec5ea-51b4-4833-be9d-7b1c282bca85"
+              defaultDictionaryLocale="vi" description="Vietnamese Drovak Keyboard"
+              index="5"/>
+    <Keyboard nameResId="VI Compact Drovak" iconResId="@drawable/ic_status_vietnamese"
+              layoutResId="@xml/vietnamese_dvorak_compact" landscapeResId="@xml/vietnamese_dvorak"
+              id="53baf0a3-389d-4257-815b-5820d7d219f7"
+              defaultDictionaryLocale="vi" description="Vietnamese Compact Drovak Keyboard"
+              index="6" />
+    <Keyboard nameResId="VI ColeMak" iconResId="@drawable/ic_status_vietnamese"
+              layoutResId="@xml/vietnamese_colemak" id="b787fcc4-3b51-4cd5-aee7-ca3c334f7855"
+              defaultDictionaryLocale="vi" description="Vietnamese ColeMak Keyboard"
+              index="7"/>
+    <Keyboard nameResId="VI Workman" iconResId="@drawable/ic_status_vietnamese"
+              layoutResId="@xml/vietnamese_workman" id="c6263036-1f5e-4895-ad7f-3d22b750e812"
+              defaultDictionaryLocale="vi" description="Vietnamese Workman Keyboard"
+              index="8"/>
+    <Keyboard nameResId="VI Terminal"
+              layoutResId="@xml/vietnamese_terminal" id="667671f8-a4c3-4506-8388-e0ab89439bdf"
+              description="Vietnamese Terminal Keyboard"
+              index="9"/>
+    <Keyboard nameResId="VI Halmak"
+              layoutResId="@xml/vietnamese_halmak" id="fcc942f6-cd41-4c09-baf8-6fa0b40d48c2"
+              description="Vietnamese Halmak Keyboard"
+              index="10"/>
+
+</Keyboards>

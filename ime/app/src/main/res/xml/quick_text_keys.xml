@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QuickTextKeys>
+    <QuickTextKey
+        id="@string/settings_default_quick_text_key_id"
+        nameResId="@string/default_quick_text_key_name"
+        popupKeyboard="@xml/popup_default_quick_text"
+        keyIcon="@drawable/ic_quick_text_dark_theme"
+        keyLabel="@string/quick_text_smiley_key_label"
+        keyOutputText="@string/quick_text_smiley_key_output"
+        description=""
+        index="1"/>
+    <QuickTextKey
+        id="0077b34d-770f-4083-83e4-081957e06c27"
+        nameResId="@string/simley_key_name"
+        popupKeyboard="@xml/popup_smileys"
+        keyIcon="@drawable/ic_quick_text_dark_theme"
+        keyLabel="@string/quick_text_smiley_key_label"
+        keyOutputText="@string/quick_text_smiley_key_output"
+        description=""
+        index="2"/>
+    <QuickTextKey
+        id="085020ea-f496-4c0c-80cb-45ca50635c59"
+        nameResId="@string/short_smiley_key_name"
+        popupKeyboard="@xml/popup_smileys_short"
+        keyIcon="@drawable/ic_quick_text_dark_theme"
+        keyLabel="@string/quick_text_short_smiley_key_label"
+        keyOutputText="@string/quick_text_short_smiley_key_output"
+        description=""
+        index="3"/>
+    <QuickTextKey
+        id="9493bdf1-ae8e-4d5d-a1e3-065bfdf83b60"
+        nameResId="@string/quick_text_kaomoji"
+        popupKeyboard="@xml/popup_kaomoji"
+        keyIcon="@drawable/ic_quick_text_dark_theme"
+        keyLabel="@string/quick_text_kaomoji_key_label"
+        keyOutputText="@string/quick_text_kaomoji_key_output"
+        description=""
+        index="4"/>
+</QuickTextKeys>

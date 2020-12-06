@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="ObsoleteSdkInt" severity="error" />
+
+    <!-- since those values are copied into the source-code anyway, I don't care -->
+    <issue id="InlinedApi" severity="informational" />
+
+    <issue id="InflateParams" severity="error">
+        <ignore path="src/main/java/com/anysoftkeyboard/ime/AnySoftKeyboardBase.java" />
+    </issue>
+
+    <issue id="GradleDependency" severity="warning" />
+    <issue id="GradleCompatible" severity="warning" />
+
+    <issue id="InvalidPackage" severity="ignore" />
+
+    <issue id="Typos" severity="error">
+        <!-- ignoring translations from crowdin -->
+        <ignore path="src/main/res/values-*/strings.xml" />
+    </issue>
+
+    <issue id="VisibleForTests" severity="error" >
+        <ignore path="*/AnySoftKeyboardRobolectricTestRunner.java" />
+    </issue>
+
+    <issue id="StringFormatCount" severity="fatal" />
+
+    <issue id="Recycle" severity="error" />
+
+    <issue id="HandlerLeak" severity="error" />
+
+    <issue id="TypographyEllipsis" severity="error" >
+        <!-- ignoring translations from crowdin -->
+        <ignore path="src/main/res/values-*/strings.xml" />
+    </issue>
+
+    <issue id="UnusedResources" severity="error">
+        <ignore path="**/strings_do_not_translate.xml" />
+        <ignore path="**/layout/*.xml" />
+    </issue>
+
+    <issue id="MissingTranslation" severity="error">
+        <ignore path="**/strings_do_not_translate.xml" />
+        <ignore path="**/layout/*.xml" />
+    </issue>
+
+    <issue id="DisableBaselineAlignment" severity="error" />
+
+    <issue id="Autofill" severity="warning" />
+</lint>

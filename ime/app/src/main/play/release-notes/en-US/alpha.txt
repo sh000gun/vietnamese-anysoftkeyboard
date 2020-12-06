@@ -1,0 +1,7 @@
+* Keep safe! #covid19
+* Suggesting recent clipboard entry.
+* A few bug fixes.
+* Updated translations.
+* YABTU
+
+More here: https://github.com/AnySoftKeyboard/AnySoftKeyboard/milestone/92

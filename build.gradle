@@ -1,0 +1,67 @@
+import java.util.stream.Stream
+import java.nio.file.Files
+
+System.setProperty("file.encoding", "UTF-8")
+
+def logFile = rootProject.file("build-logging/build-log-${System.currentTimeMillis()}.log")
+gradle.addBuildListener(new BuildLogger(logFile))
+
+buildscript {
+    repositories {
+        google()
+        mavenLocal()
+        jcenter()
+        maven { url 'https://repo1.maven.org/maven2' /*maven-central with HTTPS*/ }
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+        maven { url 'https://jitpack.io' }
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.5.3'
+        classpath 'com.github.triplet.gradle:play-publisher:2.6.2'
+        classpath 'net.ltgt.gradle:gradle-errorprone-plugin:1.1.1'
+        classpath 'gradle.plugin.com.github.sherter.google-java-format:google-java-format-gradle-plugin:0.8'
+        classpath 'net.evendanan.autoversion:gradle-plugin:0.2.2'
+    }
+}
+
+apply plugin: 'com.github.sherter.google-java-format'
+
+googleJavaFormat {
+    toolVersion = '1.7'
+    options style: 'AOSP'
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenLocal()
+        maven { url 'https://repo1.maven.org/maven2' /*maven-central with HTTPS*/ }
+        jcenter()
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+        maven { url "https://jitpack.io" }
+    }
+}
+
+apply from: "${rootDir}/gradle/emoji_generator.gradle"
+apply from: "${rootDir}/gradle/root_all_projects_ext.gradle"
+apply from: "${rootDir}/gradle/fdroid_yaml_output.gradle"
+
+
+tasks.register("clean", Delete) {
+    delete buildDir
+    //we do not want to delete the current log file
+    logFile.parentFile.listFiles().each {
+        if (it != null && it.absolutePath != logFile.absolutePath) {
+            delete it
+        }
+    }
+
+    //deleting all beta/production change-logs
+    Stream<Path> files = Files.walk(rootDir.toPath())
+    files.sorted(Comparator.reverseOrder())
+            .map { it.toFile() }
+            .filter { it.name == 'beta.txt' || it.name == 'production.txt' }
+            .forEach { it.deleteOnExit() }
+    files.close()
+}

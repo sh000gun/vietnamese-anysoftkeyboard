@@ -1,0 +1,40 @@
+name: packs-lists
+
+#always run on the default branch: master
+on:
+  schedule:
+    - cron: '30 09 * * *'
+  push:
+    branches:
+      - master
+    paths:
+      - 'addons/**'
+
+env:
+  TERM: dumb
+  TMPDIR: "/tmp"
+
+jobs:
+  packs-md-update:
+    runs-on: ubuntu-18.04
+    container: menny/ndk_ask:1.13.7
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.BOT_MASTER_RW_GITHUB_TOKEN }}
+      - name: setup
+        run: ./scripts/ci/ci_setup.sh
+      - name: update packs list
+        run: ./gradlew :addons:languages:generatePacksMarkDown :addons:themes:generatePacksMarkDown :addons:quicktexts:generatePacksMarkDown
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v2.4.4
+        with:
+          token: ${{ secrets.BOT_MASTER_RW_GITHUB_TOKEN }}
+          commit-message: 'Automated Packs List Update'
+          title: 'Automated Packs List Update'
+          committer: 'Polyglot <ask@evendanan.net>'
+          author: 'Polyglot <ask@evendanan.net>'
+          body: 'Generated from latest _master_ addons packages.'
+          team-reviewers: add-on-maintainers
+          branch: 'bot-pr/packs-list-update'
+          labels: automerge

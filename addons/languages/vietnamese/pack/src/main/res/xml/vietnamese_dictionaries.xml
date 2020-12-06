@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dictionaries>
+    <Dictionary
+        autoTextResourceId="@xml/vietnamese_autotext"
+        description="Vietnamese"
+        dictionaryResourceId="@array/vietnamese_words_dict_array"
+        id="33a8a939-df4b-46c0-89bb-9c399a145207"
+        locale="vi"
+        nameResId="Vietnamese"
+        type="binary_resource" />
+</Dictionaries>

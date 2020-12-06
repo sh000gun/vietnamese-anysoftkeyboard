@@ -1,0 +1,40 @@
+name: localization
+
+#always run on the default branch: master
+on:
+  schedule:
+    - cron: '24 02 * * *'
+  push:
+    branches:
+      - master
+    paths:
+      - 'ime/app/src/main/res/values/strings.xml'
+
+env:
+  TERM: dumb
+  CROWDIN_API: ${{ secrets.CROWDIN_API }}
+  TMPDIR: "/tmp"
+
+jobs:
+  localization-update:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.BOT_MASTER_RW_GITHUB_TOKEN }}
+      - name: Upload strings from ime/app master
+        run: ./scripts/upload_strings_to_crowdin_api.sh keep
+      - name: Download latest translations
+        run: ./scripts/update_strings_from_crowdin_api.sh build
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v2.4.4
+        with:
+          token: ${{ secrets.BOT_MASTER_RW_GITHUB_TOKEN }}
+          commit-message: 'Automated Localization Update from crowdin'
+          title: 'Automated Localization Update from crowdin'
+          committer: 'Polyglot <ask@evendanan.net>'
+          author: 'Polyglot <ask@evendanan.net>'
+          body: 'Generated from latest _master_ strings and crowdin data.'
+          team-reviewers: add-on-maintainers
+          branch: 'bot-pr/localization-update'
+          labels: automerge

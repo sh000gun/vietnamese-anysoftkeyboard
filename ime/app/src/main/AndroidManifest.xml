@@ -1,0 +1,124 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.menny.android.anysoftkeyboard">
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true"
+        tools:ignore="UnusedAttribute" />
+    <!-- http://d.android.com/guide/practices/screens_support.html read about legacy. -->
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- required for the user dictionary (long press a word in the suggestions bar) -->
+    <uses-permission android:name="android.permission.READ_USER_DICTIONARY" />
+    <uses-permission android:name="android.permission.WRITE_USER_DICTIONARY" />
+    <!-- REQUIRED FOR THE CONTACTS DICTIONARY -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <!-- REQUIRED BACKUP TO/RESTORE FROM SDCARD -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <!-- currently, only support touch and fake-touch devices -->
+    <uses-feature android:name="android.hardware.faketouch" />
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+
+    <!-- used in QuickTextViewFactory -->
+    <uses-sdk tools:overrideLibrary="com.astuetz.pagerslidingtabstrip,androidx.test,androidx.test.core,android.support.v13" />
+
+    <application
+        android:name=".AnyApplication"
+        android:hardwareAccelerated="true"
+        android:icon="@mipmap/ic_launcher"
+        android:installLocation="internalOnly"
+        android:label="@string/ime_name"
+        android:restoreAnyVersion="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:theme="@style/Theme.AskApp"
+        tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
+
+        <!-- used to backup the settings and SQL to the cloud -->
+        <!--
+        <meta-data
+            android:name="com.google.android.backup.api_key"
+            android:value="AEdPqrEAAAAILlrSpiqigog3iJt3BwYxzNXMUzqgGV_dJ1EPDQ"/>
+        -->
+
+        <!-- this is the IME with the pointer to the settings ui (xml/method) -->
+        <service
+            android:name=".SoftKeyboard"
+            android:permission="android.permission.BIND_INPUT_METHOD">
+            <intent-filter>
+                <action android:name="android.view.InputMethod" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.view.im"
+                android:resource="@xml/method" />
+        </service>
+
+        <!-- ui activities -->
+        <!-- settings ui activities -->
+        <!-- this is just a proxy activity, it does nothing but direct to the actual setting ativity
+        I use this, so I can 'disable' this activity at runtime, and so remove ASK from the launcher's icons -->
+        <activity
+            android:name="com.menny.android.anysoftkeyboard.LauncherSettingsActivity"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/ime_name"
+            android:launchMode="singleTop"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:theme="@style/Theme.AskApp">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
+        </activity>
+        <activity
+            android:name="com.anysoftkeyboard.ui.settings.MainSettingsActivity"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/ime_name"
+            android:launchMode="singleTask"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:theme="@style/Theme.AskApp"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.anysoftkeyboard.ui.settings.BasicAnyActivity"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/ime_name"
+            android:launchMode="singleTask"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:theme="@style/Theme.AskApp.NoTitle.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name="com.anysoftkeyboard.ui.tutorials.TestersNoticeActivity"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/testers_version"
+            android:launchMode="singleTop"
+            android:noHistory="true"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:theme="@style/Theme.AskApp.Popup" />
+        <!-- ui when a crash happens -->
+        <activity
+            android:name="com.anysoftkeyboard.ui.SendBugReportUiActivity"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/ime_name"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:theme="@style/Theme.AskApp.NoTitle" />
+
+        <activity
+            android:name="com.anysoftkeyboard.ui.VoiceInputNotInstalledActivity"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/ime_name"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+    </application>
+
+</manifest>

@@ -1,0 +1,36 @@
+codecov:
+  branch: master
+  require_ci_to_pass: false
+  notify:
+    wait_for_ci: false
+    after_n_builds: 2
+
+coverage:
+  precision: 2
+  round: down
+  range: "65...100"
+
+  ignore:
+    - "ime/app/src/canary"
+    - "ime/app/src/test"
+    - "ime/app/src/main/java/com/anysoftkeyboard/ui/dev"
+    - "ime/app/src/main/java/android"
+    - "ime/app/src/main/java/com/google/android/voiceime"
+    - "ime/app/src/main/java/com/emtronics/dragsortrecycler/DragSortRecycler.java"
+
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 5%
+        base: auto
+        # advanced settings
+        branches:
+          - master
+        if_no_uploads: error
+        if_not_found: success
+        if_ci_failed: error
+        only_pulls: false
+comment:
+  layout: "diff, files"
+  behavior: default

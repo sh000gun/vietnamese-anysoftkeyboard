@@ -1,0 +1,126 @@
+group 'net.evendanan'
+
+ext.override_app_id = 'com.menny.android.anysoftkeyboard'
+ext.shouldBePublished = true
+ext.override_release_key_alias = 'anysoftkeyboard'
+
+apply from: "${rootDir}/gradle/apk_module.gradle"
+
+android {
+    defaultConfig {
+        //adding additional fields to the BuildConfig class.
+        String support_email_address = System.getenv("ANYSOFTKEYBOARD_CRASH_REPORT_EMAIL")
+        println 'crash report email is: ' + support_email_address
+
+        buildConfigField "String", "CRASH_REPORT_EMAIL_ADDRESS", '"' + support_email_address + '"'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles 'proguard-android-optimize.txt', 'proguard-rules.txt', 'proguard-anysoftkeyboard.txt'
+        }
+
+        canary {
+            initWith buildTypes.release
+
+            matchingFallbacks = ['release', 'debug']
+        }
+
+        allAddOns {
+            initWith buildTypes.debug
+
+            matchingFallbacks = ['debug']
+        }
+    }
+}
+
+//adding TESTING_BUILD
+android {
+    buildTypes {
+        release {
+            buildConfigField("boolean", "TESTING_BUILD", "false")
+
+            packagingOptions {
+                //since dictionary jni so files are coming from
+                //another module, they are stripped there and should
+                //not be stripped again.
+                //double-stripping causes crash stacktraces to look weird
+                //in play-store.
+                doNotStrip '**/anysoftkey*_jni.so'
+            }
+        }
+
+        debug {
+            buildConfigField("boolean", "TESTING_BUILD", "true")
+        }
+
+        canary {
+            buildConfigField("boolean", "TESTING_BUILD", "true")
+
+            packagingOptions {
+                //since dictionary jni so files are coming from
+                //another module, they are stripped there and should
+                //not be stripped again.
+                //double-stripping causes crash stacktraces to look weird
+                //in play-store.
+                doNotStrip '**/anysoftkey*_jni.so'
+            }
+        }
+
+        allAddOns {
+            buildConfigField("boolean", "TESTING_BUILD", "true")
+        }
+    }
+}
+
+android {
+    sourceSets.getByName('allAddOns') {
+        it.java.srcDirs += 'src/debug/java'
+        it.res.srcDirs += 'src/debug/res'
+    }
+}
+
+dependencies {
+    implementation project(':api')
+    implementation project(':addons:base')
+    implementation project(':addons:languages:english:pack')
+    implementation project(':ime:base')
+    implementation project(':ime:base-rx')
+    implementation project(':ime:nextword')
+    implementation project(':ime:addons')
+    implementation project(':ime:dictionaries')
+    implementation project(':ime:dictionaries:jnidictionaryv1')
+    implementation project(':ime:dictionaries:jnidictionaryv2')
+    implementation project(':ime:prefs')
+    implementation project(':ime:overlay')
+    implementation project(':ime:pixel')
+    implementation project(':ime:remote')
+    implementation project(':ime:voiceime')
+
+    implementation "com.android.support:support-fragment:$supportLibVersion"
+    implementation "com.android.support:appcompat-v7:$supportLibVersion"
+    implementation "com.android.support:support-v13:$supportLibVersion"
+    implementation "com.android.support:recyclerview-v7:$supportLibVersion"
+    implementation "com.android.support:cardview-v7:$supportLibVersion"
+    implementation "com.android.support:support-annotations:$supportLibVersion"
+    implementation "com.android.support:palette-v7:$supportLibVersion"
+    implementation "com.android.support:preference-v7:$supportLibVersion"
+    implementation "com.android.support:design:$supportLibVersion"
+    implementation 'com.jpardogo.materialtabstrip:library:1.1.0'
+    implementation 'com.github.karczews:rx2-broadcast-receiver:1.0.5'
+    implementation('com.github.menny.Chauffeur:permissions:0.1.1') {
+        exclude group: 'com.android.support'
+    }
+    implementation 'org.apache.commons:commons-text:1.6'
+
+    testImplementation project(path: ':ime:base-test')
+    testImplementation 'com.github.triplet.simpleprovider:simpleprovider:1.1.0'
+
+    //allAddOns have all the add-ons packs as dependencies
+    rootProject.findProject(":addons").subprojects.forEach {
+        if (it.name == 'pack') {
+            allAddOnsImplementation it
+        }
+    }
+}
